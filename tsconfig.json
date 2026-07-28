@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "module": "es2020",
+        "target": "ES6",
+        "lib": ["es2015", "DOM", "esnext"],
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "declaration": true,
+        "outDir": "./dist",
+        "sourceMap": true,
+        "newLine": "LF",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "incremental": true,
+        "strict": true,
+        "downlevelIteration": true,
+        "jsx": "react-jsx",
+        "noFallthroughCasesInSwitch": true,
+        "skipLibCheck": true
+    },
+    "include": ["src"],
+    "exclude": ["src/stories"]
+}
