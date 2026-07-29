@@ -1,6 +1,6 @@
 # Scripts
 
-This directory is reserved for project scripts.
+This directory contains repository maintenance and generation scripts.
 
-Add scripts here only when a real maintenance or generation workflow exists.
-Do not add placeholder automation that has no current use.
+Color tokens are generated from the JSON sources under
+`src/tokens/source/colors/` through `generateColorTokens.mjs`.

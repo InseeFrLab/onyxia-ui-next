@@ -9,6 +9,7 @@
         "outDir": "./dist",
         "sourceMap": true,
         "newLine": "LF",
+        "types": ["node", "react", "react-dom"],
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "incremental": true,
@@ -18,6 +19,5 @@
         "noFallthroughCasesInSwitch": true,
         "skipLibCheck": true
     },
-    "include": ["src"],
-    "exclude": ["src/stories"]
+    "include": ["src"]
 }

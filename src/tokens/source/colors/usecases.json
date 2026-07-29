@@ -1,0 +1,194 @@
+{
+    "collection": "colors-usecases",
+    "modes": ["light", "dark"],
+    "values": {
+        "usecases/backgrounds/background": {
+            "light": "colors-palette/neutral/neutral-100",
+            "dark": "colors-palette/neutral/neutral-950"
+        },
+        "usecases/contents/content-primary": {
+            "light": "colors-palette/neutral/neutral-950",
+            "dark": "colors-palette/neutral/neutral-100"
+        },
+        "usecases/contents/content-secondary": {
+            "light": "colors-palette/neutral/neutral-800",
+            "dark": "colors-palette/neutral/neutral-300"
+        },
+        "usecases/contents/content-tertiary": {
+            "light": "colors-palette/neutral/neutral-600",
+            "dark": "colors-palette/neutral/neutral-400"
+        },
+        "usecases/contents/content-decoration": {
+            "light": "colors-palette/neutral/neutral-300",
+            "dark": "colors-palette/neutral/neutral-600"
+        },
+        "usecases/contents/content-disabled": {
+            "light": "colors-palette/neutral/neutral-400",
+            "dark": "colors-palette/neutral/neutral-600"
+        },
+        "usecases/contents/content-inverse": {
+            "light": "colors-palette/neutral/neutral-100",
+            "dark": "colors-palette/neutral/neutral-950"
+        },
+        "usecases/contents/content-focus": {
+            "light": "colors-palette/accent/primary/primary-600",
+            "dark": "colors-palette/accent/primary/primary-400"
+        },
+        "usecases/contents/content-color-secondary": {
+            "light": "colors-palette/accent/secondary/secondary-600",
+            "dark": "colors-palette/accent/secondary/secondary-400"
+        },
+        "usecases/contents/content-success": {
+            "light": "colors-palette/alert/success/success-600",
+            "dark": "colors-palette/alert/success/success-400"
+        },
+        "usecases/contents/content-danger": {
+            "light": "colors-palette/alert/danger/danger-600",
+            "dark": "colors-palette/alert/danger/danger-400"
+        },
+        "usecases/contents/content-warning": {
+            "light": "colors-palette/alert/warning/warning-600",
+            "dark": "colors-palette/alert/warning/warning-400"
+        },
+        "usecases/contents/content-info": {
+            "light": "colors-palette/alert/info/info-600",
+            "dark": "colors-palette/alert/info/info-500"
+        },
+        "usecases/surface/surface-primary": {
+            "light": "colors-palette/neutral/neutral-50",
+            "dark": "colors-palette/neutral/neutral-900"
+        },
+        "usecases/surface/surface-secondary": {
+            "light": "colors-palette/neutral/neutral-100",
+            "dark": "colors-palette/neutral/neutral-950"
+        },
+        "usecases/surface/surface-tertiary": {
+            "light": "colors-palette/neutral/neutral-200",
+            "dark": "colors-palette/neutral/neutral-1000"
+        },
+        "usecases/surface/surface-hover": {
+            "light": "colors-palette/neutral/neutral-300",
+            "dark": "colors-palette/neutral/neutral-800"
+        },
+        "usecases/surface/surface-focus": {
+            "light": "colors-palette/accent/primary/primary-alpha-10",
+            "dark": "colors-palette/accent/primary/primary-alpha-10"
+        },
+        "usecases/surface/surface-selected": {
+            "light": "colors-palette/accent/primary/primary-alpha-20",
+            "dark": "colors-palette/accent/primary/primary-alpha-20"
+        },
+        "usecases/surface/surface-contrast-success": {
+            "light": "colors-palette/alert/success/success-alpha-20",
+            "dark": "colors-palette/alert/success/success-alpha-20"
+        },
+        "usecases/surface/surface-contrast-danger": {
+            "light": "colors-palette/alert/danger/danger-alpha-20",
+            "dark": "colors-palette/alert/danger/danger-alpha-20"
+        },
+        "usecases/surface/surface-contrast-warning": {
+            "light": "colors-palette/alert/warning/warning-alpha-20",
+            "dark": "colors-palette/alert/warning/warning-alpha-20"
+        },
+        "usecases/surface/surface-contrast-info": {
+            "light": "colors-palette/alert/info/info-alpha-20",
+            "dark": "colors-palette/alert/info/info-alpha-20"
+        },
+        "usecases/surface/surface-action-primary": {
+            "light": "colors-palette/accent/primary/primary-600",
+            "dark": "colors-palette/accent/primary/primary-400"
+        },
+        "usecases/surface/surface-action-primary-hover": {
+            "light": "colors-palette/accent/primary/primary-500",
+            "dark": "colors-palette/accent/primary/primary-300"
+        },
+        "usecases/surface/surface-action-primary-pressed": {
+            "light": "colors-palette/accent/primary/primary-400",
+            "dark": "colors-palette/accent/primary/primary-200"
+        },
+        "usecases/surface/surface-action-secondary": {
+            "light": "colors-palette/neutral/neutral-900",
+            "dark": "colors-palette/neutral/neutral-100"
+        },
+        "usecases/surface/surface-action-secondary-hover": {
+            "light": "colors-palette/neutral/neutral-1000",
+            "dark": "colors-palette/neutral/neutral-300"
+        },
+        "usecases/surface/surface-action-secondary-pressed": {
+            "light": "colors-palette/neutral/neutral-800",
+            "dark": "colors-palette/neutral/neutral-200"
+        },
+        "usecases/surface/surface-action-success": {
+            "light": "colors-palette/alert/success/success-500",
+            "dark": "colors-palette/alert/success/success-400"
+        },
+        "usecases/surface/surface-action-danger": {
+            "light": "colors-palette/alert/danger/danger-500",
+            "dark": "colors-palette/alert/danger/danger-400"
+        },
+        "usecases/surface/surface-action-warning": {
+            "light": "colors-palette/alert/warning/warning-500",
+            "dark": "colors-palette/alert/warning/warning-400"
+        },
+        "usecases/surface/surface-action-info": {
+            "light": "colors-palette/alert/info/info-500",
+            "dark": "colors-palette/alert/info/info-400"
+        },
+        "usecases/borders/border-neutral-primary": {
+            "light": "colors-palette/neutral/neutral-200",
+            "dark": "colors-palette/neutral/neutral-800"
+        },
+        "usecases/borders/border-secondary": {
+            "light": "colors-palette/neutral/neutral-400",
+            "dark": "colors-palette/neutral/neutral-600"
+        },
+        "usecases/borders/border-neutral-high": {
+            "light": "colors-palette/neutral/neutral-700",
+            "dark": "colors-palette/neutral/neutral-300"
+        },
+        "usecases/borders/border-focus": {
+            "light": "colors-palette/accent/primary/primary-500",
+            "dark": "colors-palette/accent/primary/primary-400"
+        },
+        "usecases/borders/border-focus-low": {
+            "light": "colors-palette/accent/primary/primary-alpha-20",
+            "dark": "colors-palette/accent/primary/primary-alpha-20"
+        },
+        "usecases/borders/border-success": {
+            "light": "colors-palette/alert/success/success-500",
+            "dark": "colors-palette/alert/success/success-400"
+        },
+        "usecases/borders/border-danger": {
+            "light": "colors-palette/alert/danger/danger-500",
+            "dark": "colors-palette/alert/danger/danger-400"
+        },
+        "usecases/borders/border-warning": {
+            "light": "colors-palette/alert/warning/warning-500",
+            "dark": "colors-palette/alert/warning/warning-400"
+        },
+        "usecases/borders/border-info": {
+            "light": "colors-palette/alert/info/info-500",
+            "dark": "colors-palette/alert/info/info-400"
+        },
+        "usecases/overlay/default": {
+            "light": "colors-palette/neutral/neutral-light-alpha-70",
+            "dark": "colors-palette/neutral/neutral-alpha-85"
+        },
+        "usecases/shadow/shadow-color-1": {
+            "light": "colors-palette/neutral/neutral-alpha-5",
+            "dark": "colors-palette/neutral/neutral-alpha-5"
+        },
+        "usecases/shadow/shadow-color-2": {
+            "light": "colors-palette/neutral/neutral-alpha-10",
+            "dark": "colors-palette/neutral/neutral-alpha-10"
+        },
+        "usecases/shadow/shadow-color-3": {
+            "light": "colors-palette/neutral/neutral-alpha-15",
+            "dark": "colors-palette/neutral/neutral-alpha-15"
+        },
+        "usecases/shadow/shadow-color-4": {
+            "light": "colors-palette/neutral/neutral-alpha-20",
+            "dark": "colors-palette/neutral/neutral-alpha-20"
+        }
+    }
+}

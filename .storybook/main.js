@@ -1,7 +1,7 @@
 module.exports = {
     stories: [
-        "../src/stories/**/*.stories.mdx",
-        "../src/stories/**/*.stories.@(ts|tsx)",
+        "../stories/**/*.stories.mdx",
+        "../stories/**/*.stories.@(ts|tsx)",
     ],
     addons: [
         "@storybook/addon-links",
@@ -12,4 +12,12 @@ module.exports = {
     core: {
         builder: "webpack5",
     },
+    babel: async options => ({
+        ...options,
+        presets: [
+            ...(options.presets ?? []),
+            require.resolve("@babel/preset-react"),
+            require.resolve("@babel/preset-typescript"),
+        ],
+    }),
 };

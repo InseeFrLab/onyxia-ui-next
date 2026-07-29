@@ -6,3 +6,7 @@ theming primitives.
 
 Do not record temporary migration notes here. Legacy transition material belongs
 under `docs/migration/`.
+
+Implementation-specific migration notes and token inventories do not belong
+here. Foundation documents should describe stable architecture, naming,
+responsibilities, and usage rules.

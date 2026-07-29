@@ -9,12 +9,16 @@
     },
     "license": "MIT",
     "scripts": {
-        "build": "tsc --project tsconfig.json",
-        "typecheck": "tsc --project tsconfig.json --noEmit",
+        "generate:tokens": "node scripts/generateColorTokens.mjs",
+        "check:tokens": "node scripts/generateColorTokens.mjs --check",
+        "build": "yarn generate:tokens && tsc --project tsconfig.json",
+        "typecheck": "yarn generate:tokens && tsc --project tsconfig.json --noEmit",
+        "lint": "yarn check:tokens && yarn format:check && yarn typecheck",
         "_format": "prettier '**/*.{ts,tsx,js,json,md}'",
         "format": "npm run _format -- --write",
         "format:check": "npm run _format -- --list-different",
-        "storybook": "start-storybook -p 6006"
+        "storybook": "yarn generate:tokens && start-storybook -p 6006",
+        "build-storybook": "yarn generate:tokens && build-storybook"
     },
     "devDependencies": {
         "@emotion/react": "^11.11.1",

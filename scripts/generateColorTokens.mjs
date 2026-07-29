@@ -1,0 +1,246 @@
+import {
+    mkdirSync,
+    readFileSync,
+    readdirSync,
+    statSync,
+    writeFileSync,
+} from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const repoRoot = path.resolve(__dirname, "..");
+
+const colorsSourceDir = path.join(repoRoot, "src/tokens/source/colors");
+const palettesSourceDir = path.join(colorsSourceDir, "palettes");
+const usecasesSourcePath = path.join(colorsSourceDir, "usecases.json");
+const generatedOutputPath = path.join(
+    repoRoot,
+    "src/tokens/generated/colors.ts",
+);
+
+function readJson(filePath) {
+    return JSON.parse(readFileSync(filePath, "utf8"));
+}
+
+function fail(message) {
+    throw new Error(`generateColorTokens: ${message}`);
+}
+
+function assertHexColor(value, context) {
+    if (
+        typeof value !== "string" ||
+        !/^#[0-9a-f]{6}([0-9a-f]{2})?$/i.test(value)
+    ) {
+        fail(`${context} must be a hex color, received ${JSON.stringify(value)}`);
+    }
+}
+
+function getPaletteSourceFiles() {
+    return readdirSync(palettesSourceDir)
+        .filter(fileName => fileName.endsWith(".json"))
+        .sort();
+}
+
+function loadPaletteSources() {
+    const paletteFiles = getPaletteSourceFiles();
+
+    if (paletteFiles.length === 0) {
+        fail("no palette JSON files were found");
+    }
+
+    const brandModes = [];
+    const primitiveColorTokens = {};
+    let referenceTokenNames = null;
+
+    for (const fileName of paletteFiles) {
+        const brandMode = path.basename(fileName, ".json");
+        const filePath = path.join(palettesSourceDir, fileName);
+        const valuesByToken = readJson(filePath);
+
+        if (
+            valuesByToken === null ||
+            typeof valuesByToken !== "object" ||
+            Array.isArray(valuesByToken) ||
+            Object.keys(valuesByToken).length === 0
+        ) {
+            fail(`palette file ${fileName} must export a non-empty object`);
+        }
+
+        const tokenNames = Object.keys(valuesByToken).sort();
+
+        if (referenceTokenNames === null) {
+            referenceTokenNames = tokenNames;
+        } else if (tokenNames.join("\n") !== referenceTokenNames.join("\n")) {
+            fail(
+                `palette file ${fileName} does not declare the same token set as the other brand palettes`,
+            );
+        }
+
+        brandModes.push(brandMode);
+
+        for (const tokenName of tokenNames) {
+            const tokenValue = valuesByToken[tokenName];
+            assertHexColor(
+                tokenValue,
+                `palette token ${tokenName} in ${fileName}`,
+            );
+
+            primitiveColorTokens[tokenName] ??= {};
+            primitiveColorTokens[tokenName][brandMode] = tokenValue;
+        }
+    }
+
+    return {
+        brandModes,
+        primitiveColorTokens,
+    };
+}
+
+function loadUsecaseSource(knownPrimitiveTokenNames) {
+    const usecasesSource = readJson(usecasesSourcePath);
+
+    if (
+        usecasesSource === null ||
+        typeof usecasesSource !== "object" ||
+        Array.isArray(usecasesSource)
+    ) {
+        fail("usecases.json must export an object");
+    }
+
+    const {
+        collection = "colors-usecases",
+        modes,
+        values: semanticColorTokens,
+    } = usecasesSource;
+
+    if (collection !== "colors-usecases") {
+        fail("usecases.json must target the colors-usecases collection");
+    }
+
+    if (!Array.isArray(modes) || modes.length === 0) {
+        fail("usecases.json must declare at least one color mode");
+    }
+
+    if (
+        semanticColorTokens === null ||
+        typeof semanticColorTokens !== "object" ||
+        Array.isArray(semanticColorTokens) ||
+        Object.keys(semanticColorTokens).length === 0
+    ) {
+        fail("usecases.json must declare semantic tokens");
+    }
+
+    for (const [tokenName, aliasesByMode] of Object.entries(
+        semanticColorTokens,
+    )) {
+        if (
+            aliasesByMode === null ||
+            typeof aliasesByMode !== "object" ||
+            Array.isArray(aliasesByMode)
+        ) {
+            fail(`semantic token ${tokenName} must declare an object of aliases`);
+        }
+
+        for (const colorMode of modes) {
+            const aliasTarget = aliasesByMode[colorMode];
+
+            if (typeof aliasTarget !== "string") {
+                fail(
+                    `semantic token ${tokenName} (${colorMode}) must reference a primitive token`,
+                );
+            }
+
+            if (!knownPrimitiveTokenNames.has(aliasTarget)) {
+                fail(
+                    `semantic token ${tokenName} (${colorMode}) references unknown primitive token ${aliasTarget}`,
+                );
+            }
+        }
+    }
+
+    return {
+        colorModes: modes,
+        semanticColorTokens,
+    };
+}
+
+function generateTypescript({
+    brandModes,
+    colorModes,
+    primitiveColorTokens,
+    semanticColorTokens,
+}) {
+    return `/**
+ * This file is generated by \`scripts/generateColorTokens.mjs\`.
+ * Do not edit it manually. Update the JSON sources under \`src/tokens/source/colors/\`
+ * and rerun \`yarn generate:tokens\`.
+ */
+
+export type HexColor = \`#\${string}\`;
+
+export const primitiveColorCollectionName = "colors-palettes" as const;
+export const semanticColorCollectionName = "colors-usecases" as const;
+
+export const onyxiaBrandModes = ${JSON.stringify(brandModes)} as const;
+export const onyxiaColorModes = ${JSON.stringify(colorModes)} as const;
+
+export type OnyxiaBrandMode = (typeof onyxiaBrandModes)[number];
+export type OnyxiaColorMode = (typeof onyxiaColorModes)[number];
+
+export const primitiveColorTokens = ${JSON.stringify(
+        primitiveColorTokens,
+        null,
+        4,
+    )} as const satisfies Record<string, Record<OnyxiaBrandMode, HexColor>>;
+
+export type PrimitiveColorTokenName = keyof typeof primitiveColorTokens;
+
+export const semanticColorTokens = ${JSON.stringify(
+        semanticColorTokens,
+        null,
+        4,
+    )} as const satisfies Record<
+    string,
+    Record<OnyxiaColorMode, PrimitiveColorTokenName>
+>;
+
+export type SemanticColorTokenName = keyof typeof semanticColorTokens;
+`;
+}
+
+function main() {
+    if (!statSync(colorsSourceDir).isDirectory()) {
+        fail("src/tokens/source/colors is missing");
+    }
+
+    const { brandModes, primitiveColorTokens } = loadPaletteSources();
+    const { colorModes, semanticColorTokens } = loadUsecaseSource(
+        new Set(Object.keys(primitiveColorTokens)),
+    );
+
+    const output = generateTypescript({
+        brandModes,
+        colorModes,
+        primitiveColorTokens,
+        semanticColorTokens,
+    });
+
+    if (process.argv.includes("--check")) {
+        const currentOutput = readFileSync(generatedOutputPath, "utf8");
+
+        if (currentOutput !== output) {
+            fail(
+                "generated color tokens are stale. Run `yarn generate:tokens` and commit the result.",
+            );
+        }
+
+        return;
+    }
+
+    mkdirSync(path.dirname(generatedOutputPath), { recursive: true });
+    writeFileSync(generatedOutputPath, output);
+}
+
+main();
