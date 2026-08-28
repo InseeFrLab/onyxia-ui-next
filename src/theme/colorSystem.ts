@@ -12,12 +12,12 @@ import {
     type SemanticColorTokenName,
 } from "../tokens/generated/colors";
 
-type PrimitiveColorValues = Record<PrimitiveColorTokenName, HexColor>;
-type SemanticColorAliases = Record<
+export type PrimitiveColorValues = Record<PrimitiveColorTokenName, HexColor>;
+export type SemanticColorAliases = Record<
     SemanticColorTokenName,
     PrimitiveColorTokenName
 >;
-type SemanticColorValues = Record<SemanticColorTokenName, HexColor>;
+export type SemanticColorValues = Record<SemanticColorTokenName, HexColor>;
 
 export type OnyxiaColorSystem = {
     brandMode: OnyxiaBrandMode;
@@ -81,7 +81,7 @@ function resolveSemanticAliases(
     return resolvedAliases;
 }
 
-function resolveSemanticColors(params: {
+export function resolveSemanticColorValues(params: {
     primitive: PrimitiveColorValues;
     aliases: SemanticColorAliases;
 }): SemanticColorValues {
@@ -101,7 +101,7 @@ export function createOnyxiaColorSystem(
     const { brandMode, colorMode } = params;
     const primitive = resolvePrimitiveColors(brandMode);
     const semanticAliases = resolveSemanticAliases(colorMode);
-    const semanticValues = resolveSemanticColors({
+    const semanticValues = resolveSemanticColorValues({
         primitive,
         aliases: semanticAliases,
     });

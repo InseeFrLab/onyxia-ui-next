@@ -1,15 +1,15 @@
-import { ColorValidationPage } from "./ColorValidationFixtures";
+import { ColorsDocumentationPage } from "./ColorsDocs";
 
 const meta = {
-    title: "Foundations/Colors/Overview",
-    component: ColorValidationPage,
+    title: "Design System/Foundations/Colors/Overview",
+    component: ColorsDocumentationPage,
     parameters: {
         controls: {
-            exclude: ["variant"],
+            exclude: ["page"],
         },
     },
     args: {
-        variant: "overview",
+        page: "overview",
     },
 };
 
