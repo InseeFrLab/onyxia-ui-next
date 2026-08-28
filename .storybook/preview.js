@@ -2,11 +2,47 @@ import React from "react";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { useDarkMode } from "storybook-dark-mode";
 import { createOnyxiaTheme, onyxiaBrandModes } from "../src";
+import "../src/assets/fonts/index.css";
 
 const prioritizedStories = [
-    "Foundations/Colors/Overview",
-    "Foundations/Colors/Components",
-    "Foundations/Colors/Palette comparison",
+    "Design System/Foundations/Colors/Overview",
+    "Design System/Foundations/Colors/Palettes",
+    "Design System/Foundations/Colors/Semantic use cases",
+    "Design System/Foundations/Colors/Palette generator",
+    "Design System/Foundations/Spacing/Overview",
+    "Design System/Foundations/Spacing/Scale",
+    "Design System/Foundations/Spacing/Relationships",
+    "Design System/Foundations/Sizing/Overview",
+    "Design System/Foundations/Sizing/Scale",
+    "Design System/Foundations/Sizing/Icon mapping",
+    "Design System/Foundations/Radius/Overview",
+    "Design System/Foundations/Radius/Scale",
+    "Design System/Foundations/Radius/Hierarchy",
+    "Design System/Foundations/Icons/Overview",
+    "Design System/Foundations/Icons/Catalog",
+    "Design System/Foundations/Icons/Semantic sizes",
+    "Design System/Foundations/Typography/Overview",
+    "Design System/Foundations/Typography/Typefaces",
+    "Design System/Foundations/Typography/Semantic hierarchy",
+    "Components/Button/Overview",
+    "Components/Button/Variants",
+    "Components/Button/Sizes",
+    "Components/Button/States",
+    "Components/Button/Icons",
+    "Components/Button/Accessibility",
+    "Components/Button/Playground",
+    "Components/TextField/Overview",
+    "Components/TextField/States",
+    "Components/TextField/Helper & error",
+    "Components/TextField/Icons / adornments",
+    "Components/TextField/Accessibility",
+    "Components/TextField/Playground",
+    "Components/SearchBar/Overview",
+    "Components/SearchBar/States",
+    "Components/SearchBar/Sizes",
+    "Components/SearchBar/Filled / clear behavior",
+    "Components/SearchBar/Accessibility",
+    "Components/SearchBar/Playground",
 ];
 
 export const globalTypes = {
@@ -28,13 +64,34 @@ export const globalTypes = {
 export const decorators = [
     (Story, context) => {
         const colorMode = useDarkMode() ? "dark" : "light";
+        const [windowInnerWidth, setWindowInnerWidth] = React.useState(() =>
+            typeof window === "undefined" ? 1920 : window.innerWidth,
+        );
+
+        React.useEffect(() => {
+            if (typeof window === "undefined") {
+                return undefined;
+            }
+
+            const handleResize = () => {
+                setWindowInnerWidth(window.innerWidth);
+            };
+
+            window.addEventListener("resize", handleResize);
+
+            return () => {
+                window.removeEventListener("resize", handleResize);
+            };
+        }, []);
+
         const theme = React.useMemo(
             () =>
                 createOnyxiaTheme({
                     brandMode: context.globals.brandMode,
                     colorMode,
+                    windowInnerWidth,
                 }),
-            [colorMode, context.globals.brandMode],
+            [colorMode, context.globals.brandMode, windowInnerWidth],
         );
 
         return (
