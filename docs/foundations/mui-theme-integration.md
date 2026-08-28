@@ -40,6 +40,10 @@ The Onyxia semantic theme is responsible for:
 
 -   resolving primitive palette values for the active brand mode;
 -   resolving semantic aliases for the active light or dark mode;
+-   exposing the approved spacing scale independently of MUI;
+-   exposing the approved radius scale independently of MUI;
+-   resolving branding-dependent typeface roles;
+-   exposing shared semantic typography styles independently of MUI;
 -   exposing typed semantic tokens to Onyxia components;
 -   keeping primitive and semantic collection boundaries explicit.
 
@@ -48,8 +52,16 @@ The Onyxia semantic theme is responsible for:
 The MUI layer is responsible for:
 
 -   mapping a focused subset of semantic tokens to MUI `palette` fields;
+-   mapping a base approved radius token to MUI `shape.borderRadius` without
+    turning MUI into the radius source of truth;
+-   mapping the approved Onyxia spacing scale to MUI `theme.spacing` without
+    creating a second unrestricted spacing system;
+-   mapping only the broadly compatible subset of semantic typography styles to
+    MUI typography variants;
 -   applying semantic component-state overrides where the native MUI palette is
     insufficient;
+-   applying semantic typography styles to MUI primitives when a compatibility
+    mapping is needed;
 -   keeping MUI-specific behavior isolated from the token source and from Onyxia
     components.
 
@@ -57,7 +69,12 @@ It must not:
 
 -   generate tokens;
 -   flatten the Onyxia taxonomy into MUI concepts;
+-   reinterpret a controlled spacing scale as an unrestricted mathematical
+    multiplier;
+-   reinterpret a controlled radius scale as unrestricted rounded geometry;
 -   derive raw colors when an approved semantic token already exists;
+-   collapse typography roles into ad hoc component-local font rules when an
+    approved semantic style exists;
 -   become the only way to access semantic values.
 
 ## State resolution
@@ -98,6 +115,9 @@ semantic behavior.
 
 Typical cases include:
 
+-   base `shape.borderRadius` compatibility for rounded MUI surfaces;
+-   components whose approved rounded treatment differs from generic MUI shape
+    defaults;
 -   contained button hover, pressed, focus, and disabled states;
 -   text-field borders, focus rings, and disabled surfaces;
 -   alert surfaces and borders;
@@ -113,6 +133,8 @@ Components should follow these rules:
 
 -   Onyxia components consume `theme.onyxia` for the full semantic API.
 -   MUI primitives may rely on the mapped `palette` fields and MUI overrides.
+-   MUI typography variants remain a compatibility subset, not the canonical
+    typography API.
 -   Components must not import JSON token sources directly.
 -   Components must not resolve primitive palette values unless they are part of
     foundation work.

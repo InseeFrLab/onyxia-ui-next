@@ -1,11 +1,11 @@
-import type { OnyxiaColorSystem } from "../colorSystem";
+import type { OnyxiaTheme } from "../theme";
 
 declare module "@mui/material/styles" {
     interface Theme {
-        onyxia: OnyxiaColorSystem;
+        onyxia: OnyxiaTheme;
     }
 
     interface ThemeOptions {
-        onyxia?: OnyxiaColorSystem;
+        onyxia?: OnyxiaTheme;
     }
 }
