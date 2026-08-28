@@ -1,6 +1,8 @@
 import type { Components } from "@mui/material/styles";
 import type { Theme } from "@mui/material/styles";
-import type { OnyxiaColorSystem } from "../colorSystem";
+import type { OnyxiaTheme } from "../theme";
+import type { OnyxiaIconSizeTokenName } from "../iconSystem";
+import type { OnyxiaSizingTokenName } from "../sizingSystem";
 
 type ButtonSemanticState = {
     background: string;
@@ -9,7 +11,7 @@ type ButtonSemanticState = {
 };
 
 function getContainedButtonState(
-    onyxia: OnyxiaColorSystem,
+    onyxia: OnyxiaTheme,
     color: "primary" | "secondary" | "error" | "success" | "warning" | "info",
 ): ButtonSemanticState {
     const { values } = onyxia.semantic;
@@ -66,7 +68,7 @@ function getContainedButtonState(
 }
 
 function getAlertSemanticState(
-    onyxia: OnyxiaColorSystem,
+    onyxia: OnyxiaTheme,
     severity: "error" | "info" | "success" | "warning",
 ) {
     const { values } = onyxia.semantic;
@@ -103,10 +105,111 @@ function getButtonFocusRing(theme: Theme) {
     return `0 0 0 4px ${theme.onyxia.semantic.values["usecases/borders/border-focus-low"]}`;
 }
 
+function getMuiSvgIconSizeToken(
+    fontSize: "inherit" | "small" | "medium" | "large",
+): OnyxiaIconSizeTokenName | null {
+    switch (fontSize) {
+        case "inherit":
+            return null;
+        case "small":
+            return "icon-size-3";
+        case "large":
+            return "icon-size-5";
+        case "medium":
+        default:
+            return "icon-size-4";
+    }
+}
+
+function getMuiIconButtonSizing(size: "small" | "medium" | "large"): {
+    box: OnyxiaSizingTokenName;
+    icon: OnyxiaIconSizeTokenName;
+} {
+    switch (size) {
+        case "small":
+            return {
+                box: "size-8",
+                icon: "icon-size-3",
+            };
+        case "large":
+            return {
+                box: "size-10",
+                icon: "icon-size-5",
+            };
+        case "medium":
+        default:
+            return {
+                box: "size-9",
+                icon: "icon-size-4",
+            };
+    }
+}
+
 export function createOnyxiaMuiComponentOverrides(
-    onyxia: OnyxiaColorSystem,
+    onyxia: OnyxiaTheme,
 ): Components<Theme> {
     return {
+        MuiSvgIcon: {
+            styleOverrides: {
+                root: ({ ownerState, theme }) => {
+                    const fontSize =
+                        ownerState.fontSize === undefined
+                            ? "medium"
+                            : ownerState.fontSize;
+
+                    if (
+                        !["inherit", "small", "medium", "large"].includes(
+                            fontSize,
+                        )
+                    ) {
+                        return {};
+                    }
+
+                    const iconSizeToken = getMuiSvgIconSizeToken(
+                        fontSize as Parameters<
+                            typeof getMuiSvgIconSizeToken
+                        >[0],
+                    );
+
+                    if (iconSizeToken === null) {
+                        return {};
+                    }
+
+                    return {
+                        fontSize: theme.onyxia.icon.toCssSize(iconSizeToken),
+                    };
+                },
+            },
+        },
+        MuiIconButton: {
+            styleOverrides: {
+                root: ({ ownerState, theme }) => {
+                    const size =
+                        ownerState.size === undefined
+                            ? "medium"
+                            : ownerState.size;
+
+                    if (!["small", "medium", "large"].includes(size)) {
+                        return {};
+                    }
+
+                    const sizing = getMuiIconButtonSizing(
+                        size as Parameters<typeof getMuiIconButtonSizing>[0],
+                    );
+
+                    return {
+                        width: theme.onyxia.sizing.toCssValue(sizing.box),
+                        height: theme.onyxia.sizing.toCssValue(sizing.box),
+                        padding: 0,
+                        borderRadius:
+                            theme.onyxia.radius.toCssValue("radius-full"),
+                        "& .MuiSvgIcon-root": {
+                            fontSize: theme.onyxia.icon.toCssSize(sizing.icon),
+                        },
+                    };
+                },
+            },
+        },
         MuiButton: {
             styleOverrides: {
                 root: ({ ownerState, theme }) => {
@@ -150,9 +253,15 @@ export function createOnyxiaMuiComponentOverrides(
                         ];
 
                     return {
+                        ...theme.onyxia.typography.toCssProperties(
+                            theme.onyxia.typography.styles.label.md.default,
+                        ),
                         backgroundColor: state.background,
+                        borderRadius:
+                            theme.onyxia.radius.toCssValue("radius-full"),
                         color: contrastText,
                         boxShadow: "none",
+                        textTransform: "none",
                         "&:hover": {
                             backgroundColor: state.hover,
                             boxShadow: "none",
@@ -189,6 +298,10 @@ export function createOnyxiaMuiComponentOverrides(
         MuiOutlinedInput: {
             styleOverrides: {
                 root: ({ theme }) => ({
+                    ...theme.onyxia.typography.toCssProperties(
+                        theme.onyxia.typography.styles.body.md,
+                    ),
+                    borderRadius: theme.onyxia.radius.toCssValue("radius-2"),
                     backgroundColor:
                         theme.onyxia.semantic.values[
                             "usecases/surface/surface-primary"
@@ -246,6 +359,9 @@ export function createOnyxiaMuiComponentOverrides(
                     },
                 }),
                 input: ({ theme }) => ({
+                    ...theme.onyxia.typography.toCssProperties(
+                        theme.onyxia.typography.styles.body.md,
+                    ),
                     color: theme.onyxia.semantic.values[
                         "usecases/contents/content-primary"
                     ],
@@ -267,6 +383,9 @@ export function createOnyxiaMuiComponentOverrides(
         MuiInputLabel: {
             styleOverrides: {
                 root: ({ theme }) => ({
+                    ...theme.onyxia.typography.toCssProperties(
+                        theme.onyxia.typography.styles.label.sm,
+                    ),
                     color: theme.onyxia.semantic.values[
                         "usecases/contents/content-secondary"
                     ],
@@ -291,6 +410,9 @@ export function createOnyxiaMuiComponentOverrides(
         MuiFormHelperText: {
             styleOverrides: {
                 root: ({ theme }) => ({
+                    ...theme.onyxia.typography.toCssProperties(
+                        theme.onyxia.typography.styles.caption.md,
+                    ),
                     color: theme.onyxia.semantic.values[
                         "usecases/contents/content-secondary"
                     ],
@@ -329,7 +451,12 @@ export function createOnyxiaMuiComponentOverrides(
                     );
 
                     return {
+                        ...theme.onyxia.typography.toCssProperties(
+                            theme.onyxia.typography.styles.body.md,
+                        ),
                         backgroundColor: state.background,
+                        borderRadius:
+                            theme.onyxia.radius.toCssValue("radius-2"),
                         border: `1px solid ${state.border}`,
                         color: state.content,
                         "& .MuiAlert-icon": {
@@ -340,6 +467,13 @@ export function createOnyxiaMuiComponentOverrides(
                         },
                     };
                 },
+            },
+        },
+        MuiChip: {
+            styleOverrides: {
+                root: ({ theme }) => ({
+                    borderRadius: theme.onyxia.radius.toCssValue("radius-full"),
+                }),
             },
         },
     };
